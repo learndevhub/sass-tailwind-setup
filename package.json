@@ -1,0 +1,39 @@
+{
+    "name": "sasstailwind",
+    "version": "0.1.0",
+    "description": "SASS compile|autoprefix|minimize and live-reload dev server using Browsersync for static HTML",
+    "main": "dist/index.html",
+    "author": "deviskobby",
+    "scripts": {
+        "copy:html": "copyfiles -u 1 ./src/*.html dist",
+        "copy:js": "copyfiles -u 2 ./src/static/js/*.js dist/assets",
+        "copy:assets": "copyfiles -u 2 ./src/static/assets/**/* dist",
+        "copy:bg-images": "copyfiles -u 4 ./src/static/sass/app/bg-images/* dist/assets",
+        "watch:html": "onchange \"src/*.html\" -- npm run copy:html",
+        "watch:js": "onchange \"src/static/js/*.js\" -- npm run copy:js",
+        "watch:assets": "onchange \"./src/static/assets/**/*\" -- npm run copy:assets",
+        "watch:bg-images": "onchange \"./src/static/scss/app/bg-images/**/*\" -- npm run copy:bg-images",
+        "watch:vendors-sass": "tailwindcss -i src/static/scss/vendors/vendors.scss -o dist/assets/css/vendors.css --watch",
+        "watch:app-sass": "sass --no-source-map --watch src/static/scss/app:dist/assets/css",
+        "build:vendors-sass": "tailwindcss src/static/scss/vendors/vendors.scss -o dist/assets/css/vendors.css",
+        "build:app-sass": "sass --no-source-map src/static/scss/app:dist/assets/css",
+        "copy": "npm-run-all --parallel copy:*",
+        "dev": "npm-run-all --parallel watch:*",
+        "build": "npm-run-all copy build:*",
+        "serve": "browser-sync start --server dist --files dist",
+        "start": "npm-run-all copy --parallel watch serve",
+        "postbuild": "postcss dist/assets/css/*.css -u autoprefixer cssnano -r --no-map"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.16",
+        "browser-sync": "^2.29.3",
+        "copyfiles": "^2.4.1",
+        "cssnano": "^6.0.1",
+        "npm-run-all": "^4.1.5",
+        "onchange": "^7.1.0",
+        "postcss": "^8.4.31",
+        "postcss-cli": "^10.1.0",
+        "sass": "^1.69.5",
+        "tailwindcss": "^3.3.5"
+    }
+}
